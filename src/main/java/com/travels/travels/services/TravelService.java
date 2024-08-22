@@ -1,5 +1,7 @@
 package com.travels.travels.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.travels.travels.models.Travel;
@@ -17,4 +19,8 @@ public class TravelService {
   public Travel saveTravel(Travel travel) {
     return travelRepository.save(travel);
   }
+
+  public List<Travel> getTravel() {
+    return travelRepository.findAll();
+}
 }
