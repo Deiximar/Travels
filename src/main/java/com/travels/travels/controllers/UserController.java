@@ -27,22 +27,19 @@ public class UserController {
 
   @PostMapping("/users")
   public ResponseEntity<User> addUser(@RequestBody User userRequest) {
-
     User user = userService.saveUser(userRequest);
     return ResponseEntity.ok(user);
   }
 
-  @PostMapping("/users/{userId}/travels")
-  public ResponseEntity<User> addTravelToUser(@PathVariable int userId, @RequestBody Travel travelRequest) {
-    try {
-      User user = userService.addTravelToUser(userId, travelRequest);
-      return ResponseEntity.ok(user);
-    } catch (RuntimeException e) {
-      return ResponseEntity.notFound().build();
-    }
+  @PostMapping("/user/{userId}/travel")
+  public ResponseEntity<Travel> addTravel(@RequestBody Travel travelRequest, @PathVariable int userId) {
+    return userService.getUserByID(userId).map(user -> {
+      Travel travel = travelService.addTravelToUser(user, travelRequest);
+      return ResponseEntity.ok(travel);
+    }).orElse(ResponseEntity.notFound().build());
   }
 
-  @GetMapping("/users/{userId}/travels")
+  @GetMapping("/user/{userId}/travels")
   public ResponseEntity<List<Travel>> getUserTravels(@PathVariable int userId) {
     try {
       List<Travel> travels = travelService.getTravelsByUserId(userId);
@@ -51,5 +48,4 @@ public class UserController {
       return ResponseEntity.notFound().build();
     }
   }
-
 }

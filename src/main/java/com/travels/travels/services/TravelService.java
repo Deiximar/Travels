@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.travels.travels.models.Travel;
+import com.travels.travels.models.User;
 import com.travels.travels.repositories.TravelRepository;
 
 @Service
@@ -26,5 +27,10 @@ public class TravelService {
 
   public List<Travel> getTravelsByUserId(Integer userId) {
     return travelRepository.findByUserId(userId);
+  }
+
+  public Travel addTravelToUser(User user, Travel travel) {
+    travel.setUser(user);
+    return travelRepository.save(travel);
   }
 }
