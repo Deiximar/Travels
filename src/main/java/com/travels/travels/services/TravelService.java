@@ -22,5 +22,9 @@ public class TravelService {
 
   public List<Travel> getTravel() {
     return travelRepository.findAll();
-}
+  }
+
+  public List<Travel> getTravelsByUserId(Integer userId) {
+    return travelRepository.findByUserId(userId);
+  }
 }

@@ -1,6 +1,9 @@
 package com.travels.travels.controllers;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,11 +32,21 @@ public class UserController {
     return ResponseEntity.ok(user);
   }
 
-  @PostMapping("/{user_id}/travels")
-  public ResponseEntity<User> addTravelToUser(@PathVariable int user_id, @RequestBody Travel travelRequest) {
+  @PostMapping("/users/{userId}/travels")
+  public ResponseEntity<User> addTravelToUser(@PathVariable int userId, @RequestBody Travel travelRequest) {
     try {
-      User user = userService.addTravelToUser(user_id, travelRequest);
+      User user = userService.addTravelToUser(userId, travelRequest);
       return ResponseEntity.ok(user);
+    } catch (RuntimeException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  @GetMapping("/users/{userId}/travels")
+  public ResponseEntity<List<Travel>> getUserTravels(@PathVariable int userId) {
+    try {
+      List<Travel> travels = travelService.getTravelsByUserId(userId);
+      return ResponseEntity.ok(travels);
     } catch (RuntimeException e) {
       return ResponseEntity.notFound().build();
     }
