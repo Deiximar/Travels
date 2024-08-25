@@ -23,10 +23,10 @@ public class TravelController {
     this.userService = userService;
   }
 
-  @PostMapping("/travels/{user_id}")
-  public ResponseEntity<Travel> addTravel(@RequestBody Travel travelRequest, @PathVariable int user_id) {
+  @PostMapping("/travels/{userId}")
+  public ResponseEntity<Travel> addTravel(@RequestBody Travel travelRequest, @PathVariable int userId) {
 
-    return userService.getUserByID(user_id).map(user -> {
+    return userService.getUserByID(userId).map(user -> {
       travelRequest.setUser(user);
       Travel travel = travelService.saveTravel(travelRequest);
       return ResponseEntity.ok(travel);
