@@ -15,6 +15,8 @@ import com.travels.travels.models.Travel;
 import com.travels.travels.models.User;
 import com.travels.travels.services.TravelService;
 import com.travels.travels.services.UserService;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 public class UserController {
@@ -55,5 +57,19 @@ public class UserController {
     } catch (RuntimeException e) {
       return ResponseEntity.notFound().build();
     }
+  }
+  @PutMapping("/user/{userId}/Travels/{travelId}")
+  public ResponseEntity<Travel> updateTravel(@PathVariable int userId, @PathVariable int travelId, @RequestBody Travel travelRequest) {
+    return userService.getUserByID(userId).map(user -> {
+      return travelService.getTravelByIdAndUserId(travelId, userId).map(travel -> {
+        travel.setTitle(travelRequest.getTitle());
+        travel.setLocation(travelRequest.getLocation());
+        travel.setImage(travelRequest.getImage());
+        travel.setDescription(travelRequest.getDescription());
+        
+        Travel updatedTravel = travelService.saveTravel(travel);
+        return ResponseEntity.ok(updatedTravel);
+      }).orElse(ResponseEntity.notFound().build());
+    }).orElse(ResponseEntity.notFound().build());
   }
 }
