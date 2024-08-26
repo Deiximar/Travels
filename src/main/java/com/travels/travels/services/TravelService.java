@@ -1,7 +1,7 @@
 package com.travels.travels.services;
 
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.travels.travels.models.Travel;
@@ -32,5 +32,8 @@ public class TravelService {
   public Travel addTravelToUser(User user, Travel travel) {
     travel.setUser(user);
     return travelRepository.save(travel);
+  }
+    public Optional<Travel> getTravelByIdAndUserId(int travelId, int userId) {
+    return travelRepository.findByIdAndUserId(travelId, userId);
   }
 }
