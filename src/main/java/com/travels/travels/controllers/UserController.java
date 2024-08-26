@@ -39,6 +39,11 @@ public class UserController {
     }
   }
 
+  @GetMapping("/users")
+  public List<User> getUser() {
+    return userService.getUser();
+  }
+
   @PostMapping("/user/{userId}/travel")
   public ResponseEntity<Travel> addTravel(@RequestBody Travel travelRequest, @PathVariable int userId) {
     return userService.getUserByID(userId).map(user -> {
@@ -56,4 +61,5 @@ public class UserController {
       return ResponseEntity.notFound().build();
     }
   }
+
 }
