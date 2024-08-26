@@ -2,7 +2,9 @@ package com.travels.travels.controllers;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,4 +39,14 @@ public class TravelController {
   public List<Travel> getTravel() {
     return travelService.getTravel();
   }
+
+    @DeleteMapping("/travels/{id}")
+    public ResponseEntity<String> deleteTravel(@PathVariable int id) {
+        try {
+            travelService.deleteTravel(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }
