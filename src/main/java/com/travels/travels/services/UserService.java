@@ -3,7 +3,7 @@ package com.travels.travels.services;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
-import com.travels.travels.models.Travel;
+import com.travels.errors.ExistingEmailError;
 import com.travels.travels.models.User;
 import com.travels.travels.repositories.TravelRepository;
 import com.travels.travels.repositories.UserRepository;
@@ -20,7 +20,11 @@ public class UserService {
     return userRepository.findById(id);
   }
 
-  public User saveUser(User user) {
+  public User addUser(User user) {
+    Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+    if (existingUser.isPresent()) {
+      throw new ExistingEmailError();
+    }
     return userRepository.save(user);
   }
 }
