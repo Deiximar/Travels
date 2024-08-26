@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.travels.travels.models.Travel;
+import com.travels.travels.models.User;
 import com.travels.travels.repositories.TravelRepository;
 
 @Service
@@ -23,14 +24,29 @@ public class TravelService {
 
   public List<Travel> getTravel() {
     return travelRepository.findAll();
-}
+  }
 
-public void deleteTravel(int id) {
-  Optional<Travel> travel = travelRepository.findById(id);
-  if (travel.isPresent()) {
-      travelRepository.deleteById(id);
-  } else {
-      throw new RuntimeException("This trip does not exist ");
+  public List<Travel> getTravelsByUserId(Integer userId) {
+    return travelRepository.findByUserId(userId);
+  }
+
+  public Travel addTravelToUser(User user, Travel travel) {
+    travel.setUser(user);
+    return travelRepository.save(travel);
+  }
+    public Optional<Travel> getTravelByIdAndUserId(int travelId, int userId) {
+    return travelRepository.findByIdAndUserId(travelId, userId);
+  }
+
+  public void deleteTravel(int id) {
+    Optional<Travel> travel = travelRepository.findById(id);
+    if (travel.isPresent()) {
+        travelRepository.deleteById(id);
+    } else {
+        throw new RuntimeException("This trip does not exist ");
+    }
   }
 }
-}
+
+
+
