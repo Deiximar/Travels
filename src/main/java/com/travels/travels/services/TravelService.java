@@ -2,6 +2,7 @@ package com.travels.travels.services;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.travels.travels.models.Travel;
@@ -36,4 +37,16 @@ public class TravelService {
     public Optional<Travel> getTravelByIdAndUserId(int travelId, int userId) {
     return travelRepository.findByIdAndUserId(travelId, userId);
   }
+
+  public void deleteTravel(int id) {
+    Optional<Travel> travel = travelRepository.findById(id);
+    if (travel.isPresent()) {
+        travelRepository.deleteById(id);
+    } else {
+        throw new RuntimeException("This trip does not exist ");
+    }
+  }
 }
+
+
+
