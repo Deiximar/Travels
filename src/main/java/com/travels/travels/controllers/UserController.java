@@ -8,15 +8,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.travels.errors.ExistingEmailError;
+import com.travels.errors.NotExistingEmailError;
+import com.travels.errors.NotMatchCredentials;
 import com.travels.travels.models.Travel;
 import com.travels.travels.models.User;
 import com.travels.travels.services.TravelService;
 import com.travels.travels.services.UserService;
 import org.springframework.web.bind.annotation.PutMapping;
 
+@RequestMapping("/api")
 @RestController
 public class UserController {
 
@@ -28,7 +32,7 @@ public class UserController {
     this.travelService = travelService;
   }
 
-  @PostMapping("/users")
+  @PostMapping("/register")
   public ResponseEntity<User> addUser(@RequestBody User userRequest) {
     try {
       User user = userService.addUser(userRequest);
@@ -64,7 +68,8 @@ public class UserController {
   }
 
   @PutMapping("/user/{userId}/travel/{travelId}")
-  public ResponseEntity<Travel> updateTravel(@PathVariable int userId, @PathVariable int travelId, @RequestBody Travel travelRequest) {
+  public ResponseEntity<Travel> updateTravel(@PathVariable int userId, @PathVariable int travelId,
+      @RequestBody Travel travelRequest) {
     return userService.getUserByID(userId).map(user -> {
       return travelService.getTravelByIdAndUserId(travelId, userId).map(travel -> {
         travel.setTitle(travelRequest.getTitle());
@@ -75,5 +80,19 @@ public class UserController {
         return ResponseEntity.ok(updatedTravel);
       }).orElse(ResponseEntity.notFound().build());
     }).orElse(ResponseEntity.notFound().build());
+  }
+
+  @PostMapping("/login")
+  public ResponseEntity<Integer> login(@RequestBody User requestUser) {
+    try {
+      Integer idUser = userService.login(requestUser);
+      return ResponseEntity.ok(idUser);
+    } catch (NotExistingEmailError e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    } catch (NotMatchCredentials e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    } catch (RuntimeException e) {
+      return ResponseEntity.internalServerError().build();
+    }
   }
 }
