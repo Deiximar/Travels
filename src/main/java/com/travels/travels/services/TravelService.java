@@ -61,4 +61,8 @@ public class TravelService {
       throw new RuntimeErrorException(er);
     }
   }
+
+  public Page<Travel> getPublicTravels(Pageable pageable) {
+    return travelRepository.findAll(pageable);
+  }
 }
