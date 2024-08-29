@@ -71,4 +71,8 @@ public class Travel {
     this.user = user;
   }
 
+  public int getUserById() {
+    return this.user.getId();
+  }
+
 }
