@@ -45,16 +45,6 @@ public class UserController {
         return ResponseEntity.ok(userService.getUser());
     }
 
-    @PostMapping("/{userId}/travel")
-    public ResponseEntity<Travel> addTravel(@RequestBody Travel travelRequest, @PathVariable int userId) {
-        return userService.getUserByID(userId)
-                .map(user -> {
-                    Travel travel = travelService.addTravelToUser(user, travelRequest);
-                    return ResponseEntity.ok(travel);
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @GetMapping("/{userId}/travels")
     public ResponseEntity<List<Travel>> getUserTravels(@PathVariable int userId) {
         try {
