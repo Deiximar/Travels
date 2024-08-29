@@ -3,7 +3,7 @@ package com.travels.travels.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.ResponseEntity;
+import javax.management.RuntimeErrorException;
 import org.springframework.stereotype.Service;
 
 import com.travels.travels.models.Travel;
@@ -49,11 +49,14 @@ public class TravelService {
     }
   }
 
-  public ResponseEntity<Travel> getTravel(Integer userId, Integer travelId) {
+  public Travel getTravel(Integer userId, Integer travelId) {
+    try {
+      Optional<Travel> existingTravel = getTravelByIdAndUserId(travelId, userId);
+      Travel travel = existingTravel.get();
+      return travel;
 
-    Optional<Travel> existingTravel = getTravelByIdAndUserId(travelId, userId);
-    Travel travel = existingTravel.get();
-    return ResponseEntity.ok(travel);
-
+    } catch (Error er) {
+      throw new RuntimeErrorException(er);
+    }
   }
 }

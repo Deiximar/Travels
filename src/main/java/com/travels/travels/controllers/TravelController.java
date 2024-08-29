@@ -39,6 +39,11 @@ public class TravelController {
 
   @GetMapping("/auth/{userId}/travels/{travelId}")
   public ResponseEntity<Travel> getTravel(@PathVariable Integer userId, @PathVariable Integer travelId) {
-    return travelService.getTravel(userId, travelId);
+    try {
+      Travel travel = travelService.getTravel(userId, travelId);
+      return ResponseEntity.ok(travel);
+    } catch (RuntimeException e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
   }
 }
