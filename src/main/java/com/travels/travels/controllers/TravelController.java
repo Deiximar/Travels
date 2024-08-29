@@ -23,8 +23,8 @@ public class TravelController {
   }
 
   @GetMapping("/travels")
-  public List<Travel> getTravel() {
-    return travelService.getTravel();
+  public List<Travel> getTravels() {
+    return travelService.getTravels();
   }
 
   @DeleteMapping("/travels/{id}")
@@ -35,5 +35,10 @@ public class TravelController {
     } catch (RuntimeException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
+  }
+
+  @GetMapping("/auth/{userId}/travels/{travelId}")
+  public ResponseEntity<Travel> getTravel(@PathVariable Integer userId, @PathVariable Integer travelId) {
+    return travelService.getTravel(userId, travelId);
   }
 }

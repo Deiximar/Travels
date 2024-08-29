@@ -3,6 +3,7 @@ package com.travels.travels.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.travels.travels.models.Travel;
@@ -22,7 +23,7 @@ public class TravelService {
     return travelRepository.save(travel);
   }
 
-  public List<Travel> getTravel() {
+  public List<Travel> getTravels() {
     return travelRepository.findAll();
   }
 
@@ -34,19 +35,25 @@ public class TravelService {
     travel.setUser(user);
     return travelRepository.save(travel);
   }
-    public Optional<Travel> getTravelByIdAndUserId(int travelId, int userId) {
+
+  public Optional<Travel> getTravelByIdAndUserId(int travelId, int userId) {
     return travelRepository.findByIdAndUserId(travelId, userId);
   }
 
   public void deleteTravel(int id) {
     Optional<Travel> travel = travelRepository.findById(id);
     if (travel.isPresent()) {
-        travelRepository.deleteById(id);
+      travelRepository.deleteById(id);
     } else {
-        throw new RuntimeException("This trip does not exist ");
+      throw new RuntimeException("This trip does not exist ");
     }
   }
+
+  public ResponseEntity<Travel> getTravel(Integer userId, Integer travelId) {
+
+    Optional<Travel> existingTravel = getTravelByIdAndUserId(travelId, userId);
+    Travel travel = existingTravel.get();
+    return ResponseEntity.ok(travel);
+
+  }
 }
-
-
-
