@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,7 +66,8 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/travel/{travelId}")
-    public ResponseEntity<Travel> updateTravel(@PathVariable int userId, @PathVariable int travelId, @RequestBody Travel travelRequest) {
+    public ResponseEntity<Travel> updateTravel(@PathVariable int userId, @PathVariable int travelId,
+            @RequestBody Travel travelRequest) {
         return userService.getUserByID(userId)
                 .map(user -> travelService.getTravelByIdAndUserId(travelId, userId)
                         .map(travel -> {
@@ -85,6 +87,8 @@ public class UserController {
         try {
             AuthResponse response = userService.login(loginRequest);
             return ResponseEntity.ok(response);
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
