@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.management.RuntimeErrorException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.travels.travels.models.Travel;
@@ -23,8 +25,8 @@ public class TravelService {
     return travelRepository.save(travel);
   }
 
-  public List<Travel> getTravels() {
-    return travelRepository.findAll();
+  public Page<Travel> getTravels(int userId, Pageable pageable) {
+    return travelRepository.findAllByUserIdFirst(userId, pageable);
   }
 
   public List<Travel> getTravelsByUserId(Integer userId) {
