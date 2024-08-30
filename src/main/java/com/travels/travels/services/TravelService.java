@@ -62,8 +62,7 @@ public class TravelService {
     }
   }
 
-  public Page<Travel> getSearchTravels(int userId, Pageable pageable, String searchTerm) {
-    return travelRepository.searchByTitleOrLocation(searchTerm, pageable, userId);
-
+  public Page<Travel> getPublicTravels(Pageable pageable) {
+    return travelRepository.findAll(pageable);
   }
 }
