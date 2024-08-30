@@ -2,9 +2,11 @@ package com.travels.travels.controllers;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,16 +45,6 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<User>> getUser() {
         return ResponseEntity.ok(userService.getUser());
-    }
-
-    @PostMapping("/{userId}/travel")
-    public ResponseEntity<Travel> addTravel(@RequestBody Travel travelRequest, @PathVariable int userId) {
-        return userService.getUserByID(userId)
-                .map(user -> {
-                    Travel travel = travelService.addTravelToUser(user, travelRequest);
-                    return ResponseEntity.ok(travel);
-                })
-                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{userId}/travels")
@@ -103,4 +95,5 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
+
 }
