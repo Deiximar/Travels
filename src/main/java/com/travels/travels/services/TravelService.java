@@ -61,4 +61,9 @@ public class TravelService {
       throw new RuntimeErrorException(er);
     }
   }
+
+  public Page<Travel> getSearchTravels(int userId, Pageable pageable, String searchTerm) {
+    return travelRepository.searchByTitleOrLocation(searchTerm, pageable, userId);
+
+  }
 }

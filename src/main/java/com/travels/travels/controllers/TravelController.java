@@ -1,6 +1,5 @@
 package com.travels.travels.controllers;
 
-import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
@@ -29,7 +28,7 @@ public class TravelController {
 
   @GetMapping("/travels")
   public Page<Travel> getTravels(@RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "8") int size, @RequestHeader int token) {
+      @RequestParam(defaultValue = "") int size,@RequestHeader int token) {
     int userId = token;
     Pageable pageable = PageRequest.of(page, size);
     return travelService.getTravels(userId, pageable);
@@ -53,6 +52,14 @@ public class TravelController {
     } catch (RuntimeException e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+  }
+
+  @GetMapping("/travels/search")
+  public Page<Travel> getSearchTravels(@RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "") int size, @RequestParam String searchTerm ,@RequestHeader int token) {
+    int userId = token;
+    Pageable pageable = PageRequest.of(page, size);
+    return travelService.getSearchTravels(userId, pageable, searchTerm);
   }
 
 }
