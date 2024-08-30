@@ -17,4 +17,9 @@ public interface TravelRepository extends JpaRepository<Travel, Integer> {
 
   @Query("SELECT t FROM Travel t ORDER BY CASE WHEN t.user.id = :userId THEN 0 ELSE 1 END, t.id")
   Page<Travel> findAllByUserIdFirst(int userId, Pageable pageable);
+
+  @Query("SELECT t FROM Travel t WHERE " + "(LOWER(t.title) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR "
+      + "LOWER(t.location) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) "
+      + "ORDER BY CASE WHEN t.user.id = :userId THEN 0 ELSE 1 END, t.title ASC")
+  Page<Travel> searchByTitleOrLocation(String searchTerm, Pageable pageable, int userId);
 }
