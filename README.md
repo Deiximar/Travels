@@ -101,7 +101,7 @@ git push origin feature/new-feature
 
 ## Frontend Integration
 
-For the frontend setup and more details, refer to the Frontend README.
+For the frontend setup and more details, refer to the [Frontend README.](https://github.com/Euge-Saravia/HappyTravel)
 
 ## Autoras ✒️
 
