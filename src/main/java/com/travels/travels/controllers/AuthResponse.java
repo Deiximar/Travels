@@ -8,10 +8,16 @@ import lombok.Data;
 
 public class AuthResponse {
 
+    private Integer userId;
     private String token;
 
-    public AuthResponse(String token) {
+    public AuthResponse(Integer userId, String token) {
+        this.userId = userId;
         this.token = token;
+    }
+
+    public Integer getUserId() {
+        return userId;
     }
 
     public String getToken() {

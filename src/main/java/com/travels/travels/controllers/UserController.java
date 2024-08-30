@@ -2,9 +2,12 @@ package com.travels.travels.controllers;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,16 +47,6 @@ public class UserController {
         return ResponseEntity.ok(userService.getUser());
     }
 
-    @PostMapping("/{userId}/travel")
-    public ResponseEntity<Travel> addTravel(@RequestBody Travel travelRequest, @PathVariable int userId) {
-        return userService.getUserByID(userId)
-                .map(user -> {
-                    Travel travel = travelService.addTravelToUser(user, travelRequest);
-                    return ResponseEntity.ok(travel);
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @GetMapping("/{userId}/travels")
     public ResponseEntity<List<Travel>> getUserTravels(@PathVariable int userId) {
         try {
@@ -65,7 +58,8 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/travel/{travelId}")
-    public ResponseEntity<Travel> updateTravel(@PathVariable int userId, @PathVariable int travelId, @RequestBody Travel travelRequest) {
+    public ResponseEntity<Travel> updateTravel(@PathVariable int userId, @PathVariable int travelId,
+            @RequestBody Travel travelRequest) {
         return userService.getUserByID(userId)
                 .map(user -> travelService.getTravelByIdAndUserId(travelId, userId)
                         .map(travel -> {
@@ -85,6 +79,8 @@ public class UserController {
         try {
             AuthResponse response = userService.login(loginRequest);
             return ResponseEntity.ok(response);
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -99,4 +95,5 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
+
 }
