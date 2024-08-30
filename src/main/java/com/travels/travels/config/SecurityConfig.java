@@ -36,6 +36,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/travels").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/travel").authenticated()
                         .requestMatchers(HttpMethod.PUT, "api/travel/edit").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "api/travel").authenticated()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
