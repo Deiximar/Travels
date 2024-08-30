@@ -93,12 +93,4 @@ public class TravelController {
     }
   }
 
-  @GetMapping("/travels/search")
-  public Page<Travel> getSearchTravels(@RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "") int size, @RequestParam String searchTerm ,@RequestHeader int token) {
-    int userId = token;
-    Pageable pageable = PageRequest.of(page, size);
-    return travelService.getSearchTravels(userId, pageable, searchTerm);
-  }
-
 }
