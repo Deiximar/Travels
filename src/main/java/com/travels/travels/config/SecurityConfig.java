@@ -35,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/travels").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/travel").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "api/travel/edit").authenticated()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

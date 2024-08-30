@@ -57,23 +57,6 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{userId}/travel/{travelId}")
-    public ResponseEntity<Travel> updateTravel(@PathVariable int userId, @PathVariable int travelId,
-            @RequestBody Travel travelRequest) {
-        return userService.getUserByID(userId)
-                .map(user -> travelService.getTravelByIdAndUserId(travelId, userId)
-                        .map(travel -> {
-                            travel.setTitle(travelRequest.getTitle());
-                            travel.setLocation(travelRequest.getLocation());
-                            travel.setImage(travelRequest.getImage());
-                            travel.setDescription(travelRequest.getDescription());
-                            Travel updatedTravel = travelService.saveTravel(travel);
-                            return ResponseEntity.ok(updatedTravel);
-                        })
-                        .orElse(ResponseEntity.notFound().build()))
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         try {

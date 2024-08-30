@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -88,6 +89,30 @@ public class TravelController {
       User user = (User) auth.getPrincipal();
       Travel travel = travelService.getTravel(user.getId(), id);
       return ResponseEntity.ok(travel);
+    } catch (RuntimeException e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+  }
+
+  @PutMapping("/travel/{id}")
+  public ResponseEntity<Travel> updateTravel(@PathVariable Integer id, @RequestBody Travel travelRequest) {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    User user = (User) auth.getPrincipal();
+
+    try {
+      return travelService.getTravelByIdAndUserId(id, user.getId())
+          .map(travel -> {
+            travel.setTitle(travelRequest.getTitle());
+            travel.setLocation(travelRequest.getLocation());
+            travel.setImage(travelRequest.getImage());
+            travel.setDescription(travelRequest.getDescription());
+
+            Travel updatedTravel = travelService.saveTravel(travel);
+
+            return ResponseEntity.ok(updatedTravel);
+          })
+          .orElse(ResponseEntity.notFound().build()); // Si el viaje no pertenece al usuario o no se encuentra
+
     } catch (RuntimeException e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
