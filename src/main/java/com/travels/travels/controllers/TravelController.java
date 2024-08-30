@@ -81,10 +81,12 @@ public class TravelController {
     }
   }
 
-  @GetMapping("/auth/{userId}/travels/{travelId}")
-  public ResponseEntity<Travel> getTravel(@PathVariable Integer userId, @PathVariable Integer travelId) {
+  @GetMapping("/travel/{id}")
+  public ResponseEntity<Travel> getTravel(@PathVariable Integer id) {
     try {
-      Travel travel = travelService.getTravel(userId, travelId);
+      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      User user = (User) auth.getPrincipal();
+      Travel travel = travelService.getTravel(user.getId(), id);
       return ResponseEntity.ok(travel);
     } catch (RuntimeException e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
