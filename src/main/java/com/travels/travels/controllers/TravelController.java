@@ -72,7 +72,7 @@ public class TravelController {
     }
   }
 
-  @DeleteMapping("/travels/{id}")
+  @DeleteMapping("/travel/{id}")
   public ResponseEntity<String> deleteTravel(@PathVariable int id) {
     try {
       travelService.deleteTravel(id);
@@ -111,7 +111,7 @@ public class TravelController {
 
             return ResponseEntity.ok(updatedTravel);
           })
-          .orElse(ResponseEntity.notFound().build()); // Si el viaje no pertenece al usuario o no se encuentra
+          .orElse(ResponseEntity.notFound().build());
 
     } catch (RuntimeException e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
